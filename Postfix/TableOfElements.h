@@ -1,6 +1,6 @@
 #pragma once
-#ifndef    ELEMENT_CLASS_H
-#define    ELEMENT_CLASS_H
+#ifndef    TABLEOFELEMENTS_CLASS_H
+#define    TABLEOFELEMENTS_CLASS_H
 #include "Element.h"
 #include <iostream>
 #include <string>
@@ -80,7 +80,7 @@ void TableOfElements::AddLine(string name, double value)
 
 void TableOfElements::DeleteElement(Element element)
 {
-	int number = GetIndex(element.GetName());
+	int number = GetIndex(element.GetNameE());
 	if (number >= 0) pTableOE[number] = pTableOE[current_size--];
 }
 

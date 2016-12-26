@@ -113,9 +113,11 @@
     <ClCompile Include="Stack.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Calculator.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="TableOfElements.h" />
+    <ClInclude Include="TranslatorToPolish.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
