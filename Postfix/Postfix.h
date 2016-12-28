@@ -16,8 +16,9 @@ using namespace std;
 	 string *operations;//строка операций
 	 char *prioritet;   //стока чаров приоритетов
  public:
-	 Polish( string str);  //конструктор инициализотор
-	 //~Polish();			   //деструктор
+	 Polish();  //конструктор инициализотор
+	 ~Polish();			   //деструктор
+	 void PutInfix(string &str) { infix = str; };
 	 string GetPostfix();					  //возвращает посфикс
 	 string GetInfix();						  //возвращает инфикс
 	 int IsOperation(string &str, int &i);    //выдает нужную операцию из таблицы, проверка на операцию 
@@ -27,16 +28,29 @@ using namespace std;
 	 double GetResult();   //высчитывает результат
  };
   
- Polish::Polish(string str)
+ Polish::Polish()
  {
-	 infix = str;
+	 infix = " ";
 	 postfix = "null";
-	 string operations[9] = { "+", "-", "*", "/", "^", "sin", "cos", "(", ")" };
-	 char prioritet[9] =    {  1 ,  1 ,  2 ,  2  , 3 ,   4 ,    4  ,  0 ,  0  };
+	 operations = new string[9];
+	 prioritet = new char[9];
+		 operations[0] = '+'; prioritet[0] = 1;
+		 operations[1] = '-'; prioritet[1] = 1;
+		 operations[2] = '*'; prioritet[3] = 2;
+		 operations[3] = '/'; prioritet[3] = 2;
+		// operations[4] = '^'; prioritet[4] = 3;
+		 operations[4] = "sin"; prioritet[4] = 4;
+		 operations[5] = "cos"; prioritet[5] = 4;
+		 operations[6] = '('; prioritet[6] = 0;
+		 operations[7] = ')'; prioritet[7] = 0;
+	
  }
 
- //Polish::~Polish()
- //{}
+ Polish::~Polish()
+ {
+	 delete[]operations;
+	 delete[]prioritet;
+ }
 
  string Polish::GetPostfix()
  {
@@ -79,167 +93,325 @@ using namespace std;
 
  bool Polish::CINCheck()
  {
-	 setlocale(LC_ALL, "Russian");
-	 string str = infix;
-	 int kol;
-	 for (int i = 0; i < str.size(); i++)
-	 {
-		 char cur = str[i];
-		 if (!(((cur > 39) && (cur < 58)) || ((cur > 64) && (cur < 91)) || ((cur > 96) && (cur < 123))))
-		 {
-			 cout << endl << "Вы ввели неверный символ на " << i + 1 << " позиции" << endl;
-			 cout << "допустимые символы: 'a-z', 'A-Z', '0-9' и арифметические операции" << endl;
-			 return 0;
-		 }
-		 if (cur == 46) str[i] = ',';
-		 if ((cur == 's') || (cur == 'c'))
-		 {
-			 if ((str.substr(i, 3) == "sin") || (str.substr(i, 3) == "cos")) i += 2;
-			 else
-			 {
-				 cout << "Ведена неправильна функция." << endl;
-				 return 0;
-			 }
-		 }
-	 }
+	// setlocale(LC_ALL, "Russian");
+	// string str = infix;
+	// int kol;
+	// for (int i = 0; i < str.size(); i++)
+	// {
+	//	 char cur = str[i];
+	//	 if (!(((cur > 39) && (cur < 58)) || ((cur > 64) && (cur < 91)) || ((cur > 96) && (cur < 123))))
+	//	 {
+	//		 cout << endl << "Вы ввели неверный символ на " << i + 1 << " позиции" << endl;
+	//		 cout << "допустимые символы: 'a-z', 'A-Z', '0-9' и арифметические операции" << endl;
+	//		 return 0;
+	//	 }
+	//	 if (cur == 46) str[i] = ',';
+	//	 if ((cur == 's') || (cur == 'c'))
+	//	 {
+	//		 if ((str.substr(i, 3) == "sin") || (str.substr(i, 3) == "cos")) i += 2;
+	//		 else
+	//		 {
+	//			 cout << "Ведена неправильна функция." << endl;
+	//			 return 0;
+	//		 }
+	//	 }
+	// }
+	//// infix = str;
+	// int i, j;
+	// int OperationIndex = IsOperation(str, i = 0);
+	// if ((OperationIndex >= 0) && (OperationIndex <= 4) || (OperationIndex == 8))
+	// {
+	//	 cout << endl << "Ваше выражение начинается с недопустимой операции или )" << endl;
+	//	 return 0;
+	// }
 
-	 infix = str;
-	 int i;
-	 int OperationIndex = IsOperation(str, i = 0);
+	// for (int i = 0; i < str.size(); i++)
+	// {
+	//	 OperationIndex = IsOperation(str, i);
+	//	 if (OperationIndex != -1) //если это допустимая операция
+	//	 {
+	//		 int OperationIndex_1 = IsOperation(str,j=i+1);
+	//		 if (OperationIndex <= 4)
+	//		 {
+	//			 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) || (OperationIndex_1 == 8))
+	//			 {
+	//				 cout << "Вы ввели неправильный символ на" << i + 1 << "позиции" << endl << "После ариф.операции не может стоять +_*/^или )" << endl;
+	//				 return 0;
+	//			 }
+	//			 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) && (OperationIndex_1 != 6) || (str[i + 1] == NULL))
+	//			 {
+	//					 cout << "Вы ввели неправильный символ на " << i + 1 << "позиции" << endl << "После операции не стоит переменная" << endl;
+	//					 return 0;
+	//			 }
+	//			 continue;
+	//			 
+	//		 }
+	//		 //if (OperationIndex == 4) //разве? дополнить
+	//		 //{
+	//			// if (OperationIndex_1 == 4)
+	//			// {
+	//			//	 cout << "Вы ввели направильный символ на " << i + 1 << "позиции" << endl << "После ^ не может идти ^" << endl;
+	//			//	 return 0;
+	//			// }
+	//			// continue;
+	//		 //}
 
-	 if ((OperationIndex >= 0) && (OperationIndex <= 4) || (OperationIndex == 8))
-	 {
-		 cout << endl << "Ваше выражение начинается с недопустимой операции или )" << endl;
-		 return 0;
-	 }
+	//		 if (OperationIndex == 5) //sin
+	//		 {
+	//			 i += 2;
+	//			 if (infix[i+1] != '(')
+	//			 {
+	//				 cout << "Вы ввели неправильный символ на" << i+1 << "позиции" << endl << "Отсутствует параметр функции sin" << endl;
+	//				 return 0;
+	//			 }
+	//			 continue;
+	//		 }
+	//		 if (OperationIndex == 6) //cos
+	//		 {
+	//			 i += 3;
+	//			 if (str[i] != '(')
+	//			 {
+	//				 cout << "Вы ввели неправильный символ на" << i << "позиции" << endl << "Отсунствует параметр функции cos" << endl;
+	//				 return 0;
+	//			 }
+	//			 continue;
+	//		 }
+	//		 if (OperationIndex == 7) // (
+	//		 {
+	//			 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) || (OperationIndex_1 == 8))
+	//			 {
+	//				 cout << "Вы ввели неправильный символ на" << i + 1 << "позиции" << endl << "После ( не может стоять операция или )" << endl;
+	//				 return 0;
+	//			 }
+	//			 kol++;
+	//			 continue;
+	//		 }
 
-	 for (int i = 0; i < str.size(); i++)
-	 {
-		 OperationIndex = IsOperation(str, i);
-		 if (OperationIndex != -1) //если это допустимая операция
-		 {
-			 int OperationIndex_1 = IsOperation(str, ++i);
-			 if (OperationIndex <= 4)
-			 {
-				 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) || (OperationIndex_1 == 8))
-				 {
-					 cout << "Вы ввели неправильный символ на" << i + 1 << "позиции" << endl << "После ариф.операции не может стоять +_*/^или )" << endl;
-					 return 0;
-				 }
-				 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) && (OperationIndex_1 != 6) || (str[i + 1] == NULL))
-				 {
-						 cout << "Вы ввели неправильный символ на " << i + 1 << "позиции" << endl << "После операции не стоит переменная" << endl;
-						 return 0;
-				 }
-				 continue;
-				 
-			 }
-			 //if (OperationIndex == 4) //разве? дополнить
-			 //{
-				// if (OperationIndex_1 == 4)
-				// {
-				//	 cout << "Вы ввели направильный символ на " << i + 1 << "позиции" << endl << "После ^ не может идти ^" << endl;
-				//	 return 0;
-				// }
-				// continue;
-			 //}
+	//		 if (OperationIndex == 8) // )
+	//		 {
+	//			 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) || (OperationIndex_1 == 7) || str[i + 1] == NULL)
+	//			 {
+	//				 kol--;
+	//				 continue;
+	//			 }
+	//			 cout << "Вы ввели непреавильный символ на" << i + 1 << "позиции" << endl << "После ) не должно быть переменной, функции или (" << endl;
+	//			 return 0;
+	//		 }
+	//	 }
+	//	 else
+	//	 {
+	//		 int p = 0;
+	//		 int m = i;
+	//		 do
+	//		 {
+	//			 p++;
+	//			 m++;
+	//			 OperationIndex = IsOperation(str, m);
+	//			 if (m == str.size())
+	//				 break;
+	//		 } while (OperationIndex == -1);
+	//		 string Str1 = str.substr(i, p);
+	//		 char *Str2 = new char[Str1.size() + 1];
+	//		 for (int j = 0; j < Str1.size() + 1; j++)
+	//			 Str2[j] = Str1[j];
+	//		 double tmp = strtod(Str2, NULL);
+	//		 if ((tmp != 0.0))
+	//		 {
+	//			int check = 0;
+	//			 for (p = 0; p < Str1.size(); p++)
+	//			 {
+	//				 if ((Str2[p] < '0') || (Str2[p] == ',') || (Str2[p] > '9'))
+	//				 {
+	//					 if (Str2[p] == ',')
+	//					 {
+	//						 check++;
+	//						 continue;
+	//					 }
+	//					 cout << "Неправильная запись переменной (Переменная не должна начинатся с цифры) на позиции " << i + 1 << endl;
+	//					 return 0;
+	//				 }
+	//				 if (check > 1)
+	//				 {
+	//					 cout << "Неправильная запись числа - лишняя запятая" << endl;;
+	//					 return 0;
+	//				 }
+	//			 }
+	//		 }
+	//		 i = i + p - 1;
+	//		 if (IsOperation(str, m = i + 1) == 7)
+	//		 {
+	//			 cout << "Неверная запись выражения" << endl;
+	//			 cout << "После переменной не может быть открывающей скобки" << endl;
+	//			 return 0;
+	//		 }
+	//	 }
+	// }
+	// if (kol != 0)
+	// {
+	//	 cout << "Введены лишние скобки" << endl;
+	//	 return 0;
+	// }
+	// return 1;
 
-			 if (OperationIndex == 5) //sin
-			 {
-				 i += 3;
-				 if (str[i] != '(')
-				 {
-					 cout << "Вы ввели неправильный символ на" << i << "позиции" << endl << "Отсунствует параметр функции sin" << endl;
-					 return 0;
-				 }
-				 continue;
-			 }
-			 if (OperationIndex == 6) //cos
-			 {
-				 i += 3;
-				 if (str[i] != '(')
-				 {
-					 cout << "Вы ввели неправильный символ на" << i << "позиции" << endl << "Отсунствует параметр функции cos" << endl;
-					 return 0;
-				 }
-				 continue;
-			 }
-			 if (OperationIndex == 7) // (
-			 {
-				 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) || (OperationIndex_1 == 8))
-				 {
-					 cout << "Вы ввели неправильный символ на" << i + 1 << "позиции" << endl << "После ( не может стоять операция или )" << endl;
-					 return 0;
-				 }
-				 kol++;
-				 continue;
-			 }
 
-			 if (OperationIndex == 8) // )
-			 {
-				 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) || (OperationIndex_1 == 7) || str[i + 1] == NULL)
-				 {
-					 kol--;
-					 continue;
-				 }
-				 cout << "Вы ввели непреавильный символ на" << i + 1 << "позиции" << endl << "После ) не должно быть переменной, функции или (" << endl;
-				 return 0;
-			 }
-		 }
-		 else
-		 {
-			 int p = 0;
-			 int m = i;
-			 do
-			 {
-				 p++;
-				 m++;
-				 OperationIndex = IsOperation(str, m);
-				 if (m == str.size())
-					 break;
-			 } while (OperationIndex == -1);
-			 string Str1 = str.substr(i, p);
-			 char *Str2 = new char[Str1.size() + 1];
-			 for (int j = 0; j < Str1.size() + 1; j++)
-				 Str2[j] = Str1[j];
-			 double tmp = strtod(Str2, NULL);
-			 if ((tmp != 0.0))
-			 {
-				int check = 0;
-				 for (p = 0; p < Str1.size(); p++)
-				 {
-					 if ((Str2[p] < '0') || (Str2[p] == ',') || (Str2[p] > '9'))
-					 {
-						 if (Str2[p] == ',')
-						 {
-							 check++;
-							 continue;
-						 }
-						 cout << "Неправильная запись переменной (Переменная не должна начинатся с цифры) на позиции " << i + 1 << endl;
-						 return 0;
-					 }
-					 if (check > 1)
-					 {
-						 cout << "Неправильная запись числа - лишняя запятая" << endl;;
-						 return 0;
-					 }
-				 }
-			 }
-			 i = i + p - 1;
-			 if (IsOperation(str, m = i + 1) == 7)
-			 {
-				 cout << "Неверная запись выражения" << endl;
-				 cout << "После переменной не может быть открывающей скобки" << endl;
-				 return 0;
-			 }
-		 }
-	 }
-	 if (kol != 0)
-	 {
-		 cout << "Введены лишние скобки" << endl;
-		 return 0;
-	 }
-	 return 1;
+string Str = infix;
+setlocale(LC_ALL, "Russian");
+string Str1;
+double tmp;
+char* Str2;
+int i, j, p, m, check;
+int amount = 0;
+char now;
+int OperationIndex;
+int OperationIndexj;
+int size = Str.size();
+for (i = 0; i < size; i++)
+{
+	now = Str[i];
+	if (!(((now > 39) && (now < 58)) || ((now > 64) && (now < 91)) || ((now > 96) && (now < 123))))
+	{
+		cout << "Введён недопустимый символ на " << i + 1 << " позиции" << endl;
+		cout << "Допустимые символы 'a-z', 'A-Z', '.', ',', '0-9', '+' , '-' , '*' , '/' " << endl;
+		return 0;
+	}
+	if (now == 46)
+		Str[i] = ',';
+}
+infix = Str;
+OperationIndex = IsOperation(Str, i = 0);
+if ((OperationIndex > -1) && (OperationIndex < 4) || (OperationIndex == 7))
+{
+	cout << "Неверная запись выражения" << endl;
+	cout << "Запись не может начинатся с операций '+' '-' '*' '/' ')' " << endl;
+	return 0;
+}
+for (i = 0; i < size; i++)
+{
+	OperationIndex = IsOperation(Str, i);
+	if (OperationIndex != -1)
+	{
+		OperationIndexj = IsOperation(Str, j = i + 1);
+		if (OperationIndex < 4)
+		{
+			if (((OperationIndexj > -1) && (OperationIndexj < 4)) || (OperationIndexj == 7))
+			{
+				cout << "Неверная запись выражения" << endl;
+				cout << "После операции не может быть операции или закрывающей скобки на позиции " << i + 1 << endl;
+				return 0;
+			}
+			if (((OperationIndexj < 4) && (OperationIndexj>-1) && (OperationIndexj != 6) || (Str[i + 1] == 0)))
+			{
+				cout << "Неверная запись выражения" << endl;
+				cout << "Отсутствует переменная после операции на позиции " << i + 1 << endl;
+				return 0;
+			}
+			continue;
+		}
+		if (OperationIndex == 4)
+		{
+			i += 2;
+			if (Str[i + 1] != '(')
+			{
+				cout << "Неверная запись выражения" << endl;
+				cout << "Отсутсвует параметр функции sin на позиции " << i + 2 << endl;
+				return 0;
+			}
+			continue;
+		}
+		if (OperationIndex == 5)
+		{
+			i += 2;
+			if (Str[i + 1] != '(')
+			{
+				cout << "Неверная запись выражения" << endl;
+				cout << "Отсутсвует параметр функции cos на позиции " << i + 2 << endl;
+				return 0;
+			}
+			continue;
+		}
+		if (OperationIndex == 6)
+		{
+			if (((OperationIndexj>-1) && (OperationIndexj<4)) || (OperationIndexj == 7))
+			{
+				cout << "Неверная запись выражения" << endl;
+				cout << "После открывающей скобки не может быть операции " << operations[OperationIndexj] << " в позиции " << i + 1 << endl;
+				return 0;
+			}
+			amount++;
+			continue;
+		}
+		if (OperationIndex == 8)
+		{
+			if ((((OperationIndexj > -1) && (OperationIndexj<4))) || (OperationIndexj == 6))
+			{
+				amount--;
+				continue;
+			}
+			if (Str[i + 1] == NULL)
+			{
+				amount--;
+				continue;
+			}
+			cout << "Неверная запись выражения" << endl;
+			cout << "После закрывающей скобки на позиции " << i + 1 << " не должно быть операнда, открывающей скобки или функций" << endl;
+			return 0;
+		}
+	}
+	else
+	{
+		p = 0;
+		m = i;
+		do
+		{
+			p++;
+			m++;
+			OperationIndex = IsOperation(Str, m);
+			if (m == size)
+				break;
+		} while (OperationIndex == -1);
+		Str1 = Str.substr(i, p);
+		Str2 = new char[Str1.size() + 1];
+		for (j = 0; j < Str1.size() + 1; j++)
+			Str2[j] = Str1[j];
+		tmp = strtod(Str2, NULL);
+		if ((tmp != 0.0))
+		{
+			check = 0;
+			for (p = 0; p < Str1.size(); p++)
+			{
+				if ((Str2[p] < '0') || (Str2[p] == ',') || (Str2[p] > '9'))
+				{
+					if (Str2[p] == ',')
+					{
+						check++;
+						continue;
+					}
+					cout << "Неправильная запись переменной (Переменная не должна начинатся с цифры) на позиции " << i + 1 << endl;
+					return 0;
+				}
+				if (check > 1)
+				{
+					cout << "Неправильная запись числа - лишняя запятая" << endl;;
+					return 0;
+				}
+			}
+		}
+		i = i + p - 1;
+		if (IsOperation(Str, m = i + 1) == 6)
+		{
+			cout << "Неверная запись выражения" << endl;
+			cout << "После переменной не может быть открывающей скобки" << endl;
+			return 0;
+		}
+	}
+}
+if (amount != 0)
+{
+	cout << "Неверная запись выражения" << endl;
+	cout << "Присутствуют лишние скобки" << endl;
+	return 0;
+}
+return 1;
  }
 
  void Polish::Translator()
