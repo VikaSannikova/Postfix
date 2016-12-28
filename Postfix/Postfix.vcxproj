@@ -110,11 +110,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Stack.cpp" />
+    <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculator.h" />
     <ClInclude Include="Element.h" />
+    <ClInclude Include="Postfix.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="TableOfElements.h" />
     <ClInclude Include="TranslatorToPolish.h" />
