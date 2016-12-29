@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #ifndef POLISH_CLASS_H
 #define POLISH_CLASS_H
 #include <string>
@@ -8,595 +8,456 @@ using namespace std;
 
 #define MaxSizeStr 1000
 
- class Polish
- {
- private:
-	 string infix;		//наш инфикс
-	 string postfix;	//постфикс
-	 string *operations;//строка операций
-	 char *prioritet;   //стока чаров приоритетов
- public:
-	 Polish();  //конструктор инициализотор
-	 ~Polish();			   //деструктор
-	 void PutInfix(string &str) { infix = str; };
-	 string GetPostfix();					  //возвращает посфикс
-	 string GetInfix();						  //возвращает инфикс
-	 int IsOperation(string &str, int &i);    //выдает нужную операцию из таблицы, проверка на операцию 
-	 int GetPrioritet(string &str); //выдает приоритет операции
-	 bool CINCheck();      //проверка введенной инфиксной записи на символы и операции
-	 void Translator();    //переводчик в постфикс
-	 double GetResult();   //высчитывает результат
- };
-  
- Polish::Polish()
- {
-	 infix = " ";
-	 postfix = "null";
-	 operations = new string[9];
-	 prioritet = new char[9];
-		 operations[0] = '+'; prioritet[0] = 1;
-		 operations[1] = '-'; prioritet[1] = 1;
-		 operations[2] = '*'; prioritet[3] = 2;
-		 operations[3] = '/'; prioritet[3] = 2;
-		// operations[4] = '^'; prioritet[4] = 3;
-		 operations[4] = "sin"; prioritet[4] = 4;
-		 operations[5] = "cos"; prioritet[5] = 4;
-		 operations[6] = '('; prioritet[6] = 0;
-		 operations[7] = ')'; prioritet[7] = 0;
-	
- }
-
- Polish::~Polish()
- {
-	 delete[]operations;
-	 delete[]prioritet;
- }
-
- string Polish::GetPostfix()
- {
-	 return postfix;
- }
-
- string Polish::GetInfix()
- {
-	 return infix;
- }
- 
- int Polish::GetPrioritet(string &str)
- {
-	 int i = 0;
-	 while (str != operations[i])
-		 i++;
-	 return prioritet[i];
- }
-
- int Polish::IsOperation(string &str, int &i )
- {
-	 
-	 for (int j = 0; j <= 8; j++)
-		 if (str[i] == operations[j][0])
-		 {
-			 if (j == 5)
-				 if (str.substr(i, 3) == "sin")
-					 return 5;
-				 else
-					 break;
-			 if (j == 6)
-				 if (str.substr(i, 6) == "cos")
-					 return 6;
-				 else
-					 break;
-			return j;
-		 }
-	 return -1;
- }
-
- bool Polish::CINCheck()
- {
-	// setlocale(LC_ALL, "Russian");
-	// string str = infix;
-	// int kol;
-	// for (int i = 0; i < str.size(); i++)
-	// {
-	//	 char cur = str[i];
-	//	 if (!(((cur > 39) && (cur < 58)) || ((cur > 64) && (cur < 91)) || ((cur > 96) && (cur < 123))))
-	//	 {
-	//		 cout << endl << "Вы ввели неверный символ на " << i + 1 << " позиции" << endl;
-	//		 cout << "допустимые символы: 'a-z', 'A-Z', '0-9' и арифметические операции" << endl;
-	//		 return 0;
-	//	 }
-	//	 if (cur == 46) str[i] = ',';
-	//	 if ((cur == 's') || (cur == 'c'))
-	//	 {
-	//		 if ((str.substr(i, 3) == "sin") || (str.substr(i, 3) == "cos")) i += 2;
-	//		 else
-	//		 {
-	//			 cout << "Ведена неправильна функция." << endl;
-	//			 return 0;
-	//		 }
-	//	 }
-	// }
-	//// infix = str;
-	// int i, j;
-	// int OperationIndex = IsOperation(str, i = 0);
-	// if ((OperationIndex >= 0) && (OperationIndex <= 4) || (OperationIndex == 8))
-	// {
-	//	 cout << endl << "Ваше выражение начинается с недопустимой операции или )" << endl;
-	//	 return 0;
-	// }
-
-	// for (int i = 0; i < str.size(); i++)
-	// {
-	//	 OperationIndex = IsOperation(str, i);
-	//	 if (OperationIndex != -1) //если это допустимая операция
-	//	 {
-	//		 int OperationIndex_1 = IsOperation(str,j=i+1);
-	//		 if (OperationIndex <= 4)
-	//		 {
-	//			 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) || (OperationIndex_1 == 8))
-	//			 {
-	//				 cout << "Вы ввели неправильный символ на" << i + 1 << "позиции" << endl << "После ариф.операции не может стоять +_*/^или )" << endl;
-	//				 return 0;
-	//			 }
-	//			 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) && (OperationIndex_1 != 6) || (str[i + 1] == NULL))
-	//			 {
-	//					 cout << "Вы ввели неправильный символ на " << i + 1 << "позиции" << endl << "После операции не стоит переменная" << endl;
-	//					 return 0;
-	//			 }
-	//			 continue;
-	//			 
-	//		 }
-	//		 //if (OperationIndex == 4) //разве? дополнить
-	//		 //{
-	//			// if (OperationIndex_1 == 4)
-	//			// {
-	//			//	 cout << "Вы ввели направильный символ на " << i + 1 << "позиции" << endl << "После ^ не может идти ^" << endl;
-	//			//	 return 0;
-	//			// }
-	//			// continue;
-	//		 //}
-
-	//		 if (OperationIndex == 5) //sin
-	//		 {
-	//			 i += 2;
-	//			 if (infix[i+1] != '(')
-	//			 {
-	//				 cout << "Вы ввели неправильный символ на" << i+1 << "позиции" << endl << "Отсутствует параметр функции sin" << endl;
-	//				 return 0;
-	//			 }
-	//			 continue;
-	//		 }
-	//		 if (OperationIndex == 6) //cos
-	//		 {
-	//			 i += 3;
-	//			 if (str[i] != '(')
-	//			 {
-	//				 cout << "Вы ввели неправильный символ на" << i << "позиции" << endl << "Отсунствует параметр функции cos" << endl;
-	//				 return 0;
-	//			 }
-	//			 continue;
-	//		 }
-	//		 if (OperationIndex == 7) // (
-	//		 {
-	//			 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) || (OperationIndex_1 == 8))
-	//			 {
-	//				 cout << "Вы ввели неправильный символ на" << i + 1 << "позиции" << endl << "После ( не может стоять операция или )" << endl;
-	//				 return 0;
-	//			 }
-	//			 kol++;
-	//			 continue;
-	//		 }
-
-	//		 if (OperationIndex == 8) // )
-	//		 {
-	//			 if ((OperationIndex_1 >= 0) && (OperationIndex_1 <= 4) || (OperationIndex_1 == 7) || str[i + 1] == NULL)
-	//			 {
-	//				 kol--;
-	//				 continue;
-	//			 }
-	//			 cout << "Вы ввели непреавильный символ на" << i + 1 << "позиции" << endl << "После ) не должно быть переменной, функции или (" << endl;
-	//			 return 0;
-	//		 }
-	//	 }
-	//	 else
-	//	 {
-	//		 int p = 0;
-	//		 int m = i;
-	//		 do
-	//		 {
-	//			 p++;
-	//			 m++;
-	//			 OperationIndex = IsOperation(str, m);
-	//			 if (m == str.size())
-	//				 break;
-	//		 } while (OperationIndex == -1);
-	//		 string Str1 = str.substr(i, p);
-	//		 char *Str2 = new char[Str1.size() + 1];
-	//		 for (int j = 0; j < Str1.size() + 1; j++)
-	//			 Str2[j] = Str1[j];
-	//		 double tmp = strtod(Str2, NULL);
-	//		 if ((tmp != 0.0))
-	//		 {
-	//			int check = 0;
-	//			 for (p = 0; p < Str1.size(); p++)
-	//			 {
-	//				 if ((Str2[p] < '0') || (Str2[p] == ',') || (Str2[p] > '9'))
-	//				 {
-	//					 if (Str2[p] == ',')
-	//					 {
-	//						 check++;
-	//						 continue;
-	//					 }
-	//					 cout << "Неправильная запись переменной (Переменная не должна начинатся с цифры) на позиции " << i + 1 << endl;
-	//					 return 0;
-	//				 }
-	//				 if (check > 1)
-	//				 {
-	//					 cout << "Неправильная запись числа - лишняя запятая" << endl;;
-	//					 return 0;
-	//				 }
-	//			 }
-	//		 }
-	//		 i = i + p - 1;
-	//		 if (IsOperation(str, m = i + 1) == 7)
-	//		 {
-	//			 cout << "Неверная запись выражения" << endl;
-	//			 cout << "После переменной не может быть открывающей скобки" << endl;
-	//			 return 0;
-	//		 }
-	//	 }
-	// }
-	// if (kol != 0)
-	// {
-	//	 cout << "Введены лишние скобки" << endl;
-	//	 return 0;
-	// }
-	// return 1;
-
-
-string Str = infix;
-setlocale(LC_ALL, "Russian");
-string Str1;
-double tmp;
-char* Str2;
-int i, j, p, m, check;
-int amount = 0;
-char now;
-int OperationIndex;
-int OperationIndexj;
-int size = Str.size();
-for (i = 0; i < size; i++)
+class Polish
 {
-	now = Str[i];
-	if (!(((now > 39) && (now < 58)) || ((now > 64) && (now < 91)) || ((now > 96) && (now < 123))))
+private:
+	string infix;		//Г­Г Гё ГЁГ­ГґГЁГЄГ±
+	string postfix;	//ГЇГ®Г±ГІГґГЁГЄГ±
+	string *operations;//Г±ГІГ°Г®ГЄГ  Г®ГЇГҐГ°Г Г¶ГЁГ©
+	char *prioritet;   //Г±ГІГ®ГЄГ  Г·Г Г°Г®Гў ГЇГ°ГЁГ®Г°ГЁГІГҐГІГ®Гў
+public:
+	Polish();  //ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЁГ­ГЁГ¶ГЁГ Г«ГЁГ§Г®ГІГ®Г°
+	~Polish();			   //Г¤ГҐГ±ГІГ°ГіГЄГІГ®Г°
+	void PutInfix(string &str) { infix = str; };
+	string GetPostfix();					  //ГўГ®Г§ГўГ°Г Г№Г ГҐГІ ГЇГ®Г±ГґГЁГЄГ±
+	string GetInfix();						  //ГўГ®Г§ГўГ°Г Г№Г ГҐГІ ГЁГ­ГґГЁГЄГ±
+	int IsOperation(string &str, int &i);    //ГўГ»Г¤Г ГҐГІ Г­ГіГ¦Г­ГіГѕ Г®ГЇГҐГ°Г Г¶ГЁГѕ ГЁГ§ ГІГ ГЎГ«ГЁГ¶Г», ГЇГ°Г®ГўГҐГ°ГЄГ  Г­Г  Г®ГЇГҐГ°Г Г¶ГЁГѕ 
+	int GetPrioritet(string &str); //ГўГ»Г¤Г ГҐГІ ГЇГ°ГЁГ®Г°ГЁГІГҐГІ Г®ГЇГҐГ°Г Г¶ГЁГЁ
+	bool CINCheck();      //ГЇГ°Г®ГўГҐГ°ГЄГ  ГўГўГҐГ¤ГҐГ­Г­Г®Г© ГЁГ­ГґГЁГЄГ±Г­Г®Г© Г§Г ГЇГЁГ±ГЁ Г­Г  Г±ГЁГ¬ГўГ®Г«Г» ГЁ Г®ГЇГҐГ°Г Г¶ГЁГЁ
+	void Translator();    //ГЇГҐГ°ГҐГўГ®Г¤Г·ГЁГЄ Гў ГЇГ®Г±ГІГґГЁГЄГ±
+	double GetResult();   //ГўГ»Г±Г·ГЁГІГ»ГўГ ГҐГІ Г°ГҐГ§ГіГ«ГјГІГ ГІ
+};
+
+Polish::Polish()
+{
+	infix = " ";
+	postfix = "null";
+	operations = new string[9];
+	prioritet = new char[9];
+	operations[0] = '+'; prioritet[0] = 1;
+	operations[1] = '-'; prioritet[1] = 1;
+	operations[2] = '*'; prioritet[3] = 2;
+	operations[3] = '/'; prioritet[3] = 2;
+	// operations[4] = '^'; prioritet[4] = 3;
+	operations[4] = "sin"; prioritet[4] = 4;
+	operations[5] = "cos"; prioritet[5] = 4;
+	operations[6] = '('; prioritet[6] = 6;
+	operations[7] = ')'; prioritet[7] = 6;
+
+}
+
+Polish::~Polish()
+{
+	delete[]operations;
+	delete[]prioritet;
+}
+
+string Polish::GetPostfix()
+{
+	return postfix;
+}
+
+string Polish::GetInfix()
+{
+	
+	return infix;
+}
+
+int Polish::GetPrioritet(string &str)
+{
+	int i = 0;
+	while (str != operations[i])
+		i++;
+	return prioritet[i];
+}
+
+int Polish::IsOperation(string &str, int &i)
+{
+	for (int j = 0; j < 8; j++)
+		if (str[i] == operations[j][0])
+		{
+			if (j == 4)
+				if (str.substr(i, 3) == "sin")
+					return 4;
+				else
+					break;
+			if (j == 5)
+				if (str.substr(i, 3) == "cos")
+					return 5;
+			if (str[i]=operations[j][0]) 
+				return j;
+		}
+	return -1;
+}
+
+bool Polish::CINCheck()
+{
+
+	string Str = infix;  //РёРЅС„РёРєСЃ
+	setlocale(LC_ALL, "Russian");
+	string Str1;     //СЃС‚СЂРѕРєР° РІ РєРѕС‚РѕСЂСѓСЋ
+	double tmp;      
+	char* Str2;
+	int i, j, p, m, check;
+	int amount = 0;  //РґР»СЏ РєРѕР»РёС‡РµСЃС‚РІР° СЃРєРѕР±РѕРє
+	char now;        //С‚РµРєСѓС‰РёР№ СЌР»РµРјРµРЅС‚ СЃС‚СЂРѕРєРё
+	int OperationIndex;    //РёРЅРґРµРєСЃ РїРµСЂРІРѕР№ РѕРїРµСЂР°С†РёРё
+	int OperationIndexj;   //РёРЅРґРµРєСЃ РІС‚РѕСЂРѕР№ РѕРїРµСЂР°С†РёРё
+	int size = Str.size();  //СЂР°Р·РјРµСЂ РёРЅС„РёРєСЃР°
+
+
+
+	for (i = 0; i < size; i++)
 	{
-		cout << "Введён недопустимый символ на " << i + 1 << " позиции" << endl;
-		cout << "Допустимые символы 'a-z', 'A-Z', '.', ',', '0-9', '+' , '-' , '*' , '/' " << endl;
+		now = Str[i];  //С‚РµРєС‰РёР№ СЌР»РµРјРµРЅС‚
+		if (!(((now > 39) && (now < 58)) || ((now > 64) && (now < 91)) || ((now > 96) && (now < 123))))   //РµСЃР»Рё РЅРµРґРѕРїСѓСЃС‚РёРјС‹Р№ СЃРёРјРІРѕР»-РѕС€РёР±РєР°
+		{
+			cout << "РќРµРІРµСЂРЅС‹Р№ СЃРёРјРІРѕР» РЅР°  " << i + 1 << " РїРѕР·РёС†РёРё" << endl;
+			cout << "Р”РѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹ 'a-z', 'A-Z', '.', ',', '0-9', '+' , '-' , '*' , '/' " << endl;
+			return 0;
+		}
+		if (now == 46)   //РµСЃР»Рё С‚РѕС‡РєР° С‚Рѕ Р·Р°РјРµРЅСЏРµРј Р·Р°РїСЏС‚РѕР№
+			Str[i] = ',';
+	}
+	infix = Str; //РёР·РјРµРЅРµРЅРЅС‹Р№ РёРЅС„РёРєСЃ СЃ Р·Р°РїСЏС‚С‹РјРё
+	OperationIndex = IsOperation(Str, i = 0);  //Р±РµСЂРµРј РёРЅРґРµРєСЃ РїРµСЂРІРѕРіРѕ СЃРёРјРІРѕР»Р°
+	if ((OperationIndex > -1) && (OperationIndex < 4)&&(OperationIndex!=1) || (OperationIndex == 7))  //РµСЃР»Рё СЌС‚Рѕ +-*\) С‚Рѕ РІСЃРµ С„Сѓ. РјРѕР¶РЅРѕ РЅР°С‡Р°С‚СЊ СЃ РјРёРЅСѓСЃР°
+	{
+		cout << "РќРµРІРµСЂРЅРѕРµ РІС‹СЂР°Р¶РµРЅРёРµ" << endl;
+		cout << "РђСЂРёС„РјРµС‚РёС‡РµСЃРєРѕРµ РІС‹СЂР°Р¶РµРЅРёРµ РЅРµ РјРѕР¶РµС‚ РЅР°С‡РёРЅР°С‚СЊСЃСЏ СЃ '+' '-' '*' '/' ')' " << endl;
 		return 0;
 	}
-	if (now == 46)
-		Str[i] = ',';
-}
-infix = Str;
-OperationIndex = IsOperation(Str, i = 0);
-if ((OperationIndex > -1) && (OperationIndex < 4) || (OperationIndex == 7))
-{
-	cout << "Неверная запись выражения" << endl;
-	cout << "Запись не может начинатся с операций '+' '-' '*' '/' ')' " << endl;
-	return 0;
-}
-for (i = 0; i < size; i++)
-{
-	OperationIndex = IsOperation(Str, i);
-	if (OperationIndex != -1)
+	for (i = 0; i < size; i++)  //РµСЃР»Рё РІСЃРµ РѕРє
 	{
-		OperationIndexj = IsOperation(Str, j = i + 1);
-		if (OperationIndex < 4)
+		OperationIndex = IsOperation(Str, i); //Р±РµСЂРµРј РёРЅРґРµРєСЃ СЃРёРјРІРѕР»Р° РЅР° РёС‚РѕРј РјРµСЃС‚Р°
+		if (OperationIndex != -1)  //РµСЃР»Рё СЌС‚Рѕ РѕРїРµСЂР°С†РёСЏ
 		{
-			if (((OperationIndexj > -1) && (OperationIndexj < 4)) || (OperationIndexj == 7))
+			OperationIndexj = IsOperation(Str, j = i + 1); //Р±РµСЂРµРј РёРЅРґРµРєСЃ СЃР»РµРґСѓСЋС‰РµРіРѕ СЃРёРјРІРѕР»Р°
+			if (OperationIndex < 4)  //РµСЃР»Рё РёРЅРґРµРєСЃ РїРµСЂРІС‹Р№  =-*\
+		
 			{
-				cout << "Неверная запись выражения" << endl;
-				cout << "После операции не может быть операции или закрывающей скобки на позиции " << i + 1 << endl;
-				return 0;
-			}
-			if (((OperationIndexj < 4) && (OperationIndexj>-1) && (OperationIndexj != 6) || (Str[i + 1] == 0)))
-			{
-				cout << "Неверная запись выражения" << endl;
-				cout << "Отсутствует переменная после операции на позиции " << i + 1 << endl;
-				return 0;
-			}
-			continue;
-		}
-		if (OperationIndex == 4)
-		{
-			i += 2;
-			if (Str[i + 1] != '(')
-			{
-				cout << "Неверная запись выражения" << endl;
-				cout << "Отсутсвует параметр функции sin на позиции " << i + 2 << endl;
-				return 0;
-			}
-			continue;
-		}
-		if (OperationIndex == 5)
-		{
-			i += 2;
-			if (Str[i + 1] != '(')
-			{
-				cout << "Неверная запись выражения" << endl;
-				cout << "Отсутсвует параметр функции cos на позиции " << i + 2 << endl;
-				return 0;
-			}
-			continue;
-		}
-		if (OperationIndex == 6)
-		{
-			if (((OperationIndexj>-1) && (OperationIndexj<4)) || (OperationIndexj == 7))
-			{
-				cout << "Неверная запись выражения" << endl;
-				cout << "После открывающей скобки не может быть операции " << operations[OperationIndexj] << " в позиции " << i + 1 << endl;
-				return 0;
-			}
-			amount++;
-			continue;
-		}
-		if (OperationIndex == 8)
-		{
-			if ((((OperationIndexj > -1) && (OperationIndexj<4))) || (OperationIndexj == 6))
-			{
-				amount--;
+				if ((OperationIndexj > -1) && (OperationIndexj < 4)&&(OperationIndexj!=1) || (OperationIndexj == 7))  //РµСЃР»Рё РѕРЅ -+*\РёР»Рё) РјРѕР¶РµС‚ РёРґС‚Рё РјРёРЅСѓСЃ
+				{
+					cout << "РќРµРІРµСЂРЅР°СЏ Р·Р°РїРёСЃСЊ РІС‹СЂР°Р¶РµРЅРёСЏ" << endl;
+					cout << "РџРѕСЃР»Рµ РѕРїРµСЂР°С†РёРё РЅРµ РјРѕР¶РµС‚ Р±С‹Р»СЊ РѕРїРµСЂР°С†РёРё РёР»Рё ) " << i + 1 << endl;
+					return 0;
+				}
+				if (((OperationIndexj < 4) && (OperationIndexj > -1) && (OperationIndexj != 6) || (Str[i + 1] == 0))) //РµСЃР»Рё РІС‚РѕСЂРѕР№ РёРЅРґРµРєСЃ +-*\ Рё РЅРµ ( РёР»Рё РЅРµС‚ СЃР»РµРґСѓСЋС‰РµРіРѕ СЌР»РµРјРµРЅС‚Р°
+				{
+					cout << "РќРµРІРµСЂРЅР°СЏ Р·Р°РїРёСЃСЊ РІС‹СЂР°Р¶РµРЅРёСЏ" << endl;
+					cout << "РџРѕСЃР»Рµ РѕРїРµСЂР°С†РёРё РЅРµС‚ РїРµСЂРµРјРµРЅРЅРѕР№ РЅР° " << i + 1 << " РїРѕР·РёС†РёРё" << endl;
+					return 0;
+				}
 				continue;
 			}
-			if (Str[i + 1] == NULL)
+			if (OperationIndex == 4) //РµСЃР»Рё СЌС‚Рѕ СЃРёРЅСѓСЃ
 			{
-				amount--;
+				i += 3;
+				if (Str[i] != '(')
+				{
+					cout << "РќРµРІРµСЂРЅР°СЏ Р·Р°РїРёСЃСЊ РІС‹СЂР°Р¶РµРЅРёСЏ" << endl;
+					cout << "РќРµС‚ РїР°СЂР°РјРµС‚СЂР° С„СѓРЅРєС†РёРё sin РЅР° " << i + 1 << endl;
+					return 0;
+				}
+				amount++; //РґРѕР±Р°РІР»СЏРµРј СЃРєСѓР±РєСѓ
 				continue;
 			}
-			cout << "Неверная запись выражения" << endl;
-			cout << "После закрывающей скобки на позиции " << i + 1 << " не должно быть операнда, открывающей скобки или функций" << endl;
+			if (OperationIndex == 5) //РµСЃР»Рё СЌС‚Рѕ РєРѕСЃРёРЅСѓСЃ
+			{
+				i += 3;
+				if (Str[i] != '(')
+				{
+					cout << "РќРµРІРµСЂРЅР°СЏ Р·Р°РїРёСЃСЊ РІС‹СЂР°Р¶РµРЅРёСЏ" << endl;
+					cout << "РЅРµС‚ РїР°СЂР°РјРµС‚СЂР° С„СѓРЅРєС†РёРё cos РЅР° " << i + 1 << endl;
+					return 0;
+				}
+				amount++; //РґРѕР±Р°РІР»СЏРµРј СЃРєРѕР±РєСѓ
+				continue;
+			}
+			if (OperationIndex == 6)  //РµСЃР»Рё СЌС‚Рѕ (
+			{
+				if ((OperationIndexj > -1) && (OperationIndexj < 4)&&(OperationIndexj!=1) || (OperationIndexj == 7)) //РµСЃР»Рё СЃР»РµРґСѓСЋС‰РёР№ СЌР»РµРјРµРЅС‚ +-*\ РёР»Рё )
+				{
+					cout << "РќРµРІРµСЂРЅР°СЏ Р·Р°РїРёСЃСЊ РІС‹СЂР°Р¶РµРЅРёСЏ" << endl;
+					cout << "РџРѕСЃР»Рµ Р·Р°РєСЂС‹РІР°СЋС‰РµР№СЃСЏ СЃРєРѕР±РєРё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕРїРµСЂР°С†РёРё " << operations[OperationIndexj] << " РЅР° РїРѕР·РёС†РёРё " << i + 2 << endl;
+					return 0;
+					
+				}
+				amount++;
+				continue;
+			}
+			if (OperationIndex == 7) //РµСЃР»Рё СЌС‚Рѕ )
+			{
+				if ((OperationIndexj > -1) && (OperationIndexj < 4) || (OperationIndexj == 7)) ///РµСЃР»Рё СЌС‚Рѕ +-*\)
+				{
+					amount--;
+					continue;
+				}
+				if (Str[i + 1] == NULL)
+				{
+					amount--;
+					continue;
+				}
+				else
+				{
+					cout << "РќРµРІРµСЂРЅР°СЏ Р·Р°РїРёСЃСЊ РІС‹СЂР°Р¶РµРЅРёСЏ" << endl;
+					cout << "РџРѕСЃР»Рµ Р·Р°РєСЂС‹РІР°СЋС‰РёРµР№ СЃРєРѕР±РєРё СЃС‚РѕРёС‚ РѕРїРµСЂР°РЅРґ РЅР° " << i + 1 << " РїРѕР·РёС†РёРё" << endl;
+					return 0;
+				}
+			}
+		}
+			else   //РµСЃР»Рё СЌС‚Рѕ РѕРїРµСЂР°РЅРґ
+			{
+				p = 0;
+				m = i;
+				do
+				{
+					p++;
+					m++;
+					OperationIndex = IsOperation(Str, m); //СЃРјРѕС‚СЂРёРј С‡С‚Рѕ Р·Р° СЃРёРјРІРѕР» СЃР»РµРґСѓСЋС‰РёР№
+					if (m == size)
+						break;
+				} while (OperationIndex == -1); //РґРµР»Р°РµРј РїРѕРєР° СЌС‚Рѕ СЃРёРјРІРѕР»
+				Str1 = Str.substr(i, p);    //Р·Р°РїРёСЃС‹РІР°РµРј РІ СЃС‚СЂРѕРєСѓ С‚Рѕ С‡С‚Рѕ Сѓ РЅР°СЃ Р±С‹Р»Рѕ РґРѕ РїРµСЂРІРѕР№ РѕРїРµСЂР°С†РёРё
+				Str2 = new char[Str1.size() + 1];  //СЃРѕР·РґР°РµРј РјР°СЃСЃРёРІ С‡Р°СЂРѕРІ СЃ РґР»РёРЅРѕР№ РЅР° 1 Р±РѕР»СЊС€РёР№ Р·Р°РїРёСЃР°РЅРЅРѕР№ СЃС‚СЂРѕРєРё
+				for (j = 0; j < Str1.size() + 1; j++)
+					Str2[j] = Str1[j]; //Р·Р°РїРѕР»РЅСЏРµРј РјР°СЃСЃРёРІ С‡Р°СЂРѕРІ СЃРёРјРІРѕР»Р°РјРё РёР· 1 СЃС‚СЂРѕРєРё
+				tmp = strtod(Str2, NULL);   //РїСЂРµРѕР±СЂР°Р·СѓРµРј СЃС‚СЂРѕРєСѓ 2 РІ РґР°Р±Р»
+				//if ((tmp != 0.0)) //РµСЃР»Рё СѓРґР°Р»РѕСЃСЊ РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ
+					//check = 0;
+					//for (p = 0; p < Str1.size(); p++)   
+					//{
+					//	if ((Str2[p] < '0') || (Str2[p] == ',') || (Str2[p] > '9'))
+					//	{
+					//		if (Str2[p] == ',')
+					//		{
+					//			check++;
+					//			continue;
+					//		}
+					//		cout << "РќРµРїСЂР°РІРёР»СЊРЅР°СЏ Р·Р°РїРёСЃСЊ. РџРµСЂРµРјРµРЅРЅР°СЏ РЅРµ РґРѕР»Р¶РЅР° РЅР°С‡РёРЅР°С‚СЊСЃСЏ СЃ С†РёС„СЂС‹ РЅР° РїРѕР·РёС†РёРё: " << i + 1 << endl; //?
+					//		return 0;
+					//	}
+					//	if (check > 1)
+					//	{
+					//		cout << "РќРµРїСЂР°РІРёР»СЊРЅР°СЏ Р·Р°РїРёСЃСЊ. Р›РёС€РЅСЏСЏ Р·Р°РїСЏС‚Р°СЏ" << endl;;
+					//		return 0;
+					//	}
+					//}
+
+				//РµСЃР»Рё С‚Р°Рј Р±СѓРєРѕРІРєРё
+				i = i + p - 1; //РїРµСЂРµСЃС‚Р°РІР»СЏРµРј i РЅР° РѕРїРµСЂР°С†РёСЋ РґРѕ РєРѕС‚РѕСЂРѕР№ СЃС‡РёС‚Р°Р»Рё
+				if (IsOperation(Str, m = i + 1) == 6) //РµСЃР»Рё СЌС‚Рѕ (
+				{
+					cout << "РќРµРІРµСЂРЅР°СЏ Р·Р°РїРёСЃСЊ  РІС‹СЂР°Р¶РµРЅРёСЏ" << endl;
+					cout << "РџРѕСЃР»Рµ РїРµСЂРµРјРµРЅРЅРѕР№ РЅРµ РјРѕР¶РµС‚ СЃС‚РѕСЏС‚СЊ (" << endl;
+					return 0;
+				}
+			}
+		}
+		if (amount != 0) //РµСЃР»Рё РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРєРѕР±РѕРє РЅРµ СЂР°РІРЅРѕ
+		{
+			cout << "РќРµРІРµСЂРЅР°СЏ Р·Р°РїРёСЃСЊ РІС‹СЂР°Р¶РµРЅРёСЏ" << endl;
+			cout << "Р§РёСЃР»Рѕ РєРѕР±РѕРє РЅРµ СЃРѕРІРїР°РґР°РµС‚." << endl;
 			return 0;
 		}
-	}
-	else
+		return 1;
+}
+
+void Polish::Translator()
+{
+	string token = infix; //
+	Stack <string> operations1; //СЃС‚СЌРє РѕРїРµСЂР°С†РёР№
+	string str, output, operationTop;
+	int size = infix.size(), operationIndex, p, m, j;
+
+
+	for (int i = 0; i < size; i++) //РёРґРµРј РґРѕ РєРѕРЅС†Р° РёРЅС„РёРєСЃР°
 	{
-		p = 0;
-		m = i;
-		do
+		if (token[i] == '(') //РµСЃР»Рё РѕС‚РєСЂ СЃРєРѕР±РєР° РєРёРґР°РµРј РµРµ РІ СЃС‚РµРє
 		{
-			p++;
-			m++;
-			OperationIndex = IsOperation(Str, m);
-			if (m == size)
-				break;
-		} while (OperationIndex == -1);
-		Str1 = Str.substr(i, p);
-		Str2 = new char[Str1.size() + 1];
-		for (j = 0; j < Str1.size() + 1; j++)
-			Str2[j] = Str1[j];
-		tmp = strtod(Str2, NULL);
-		if ((tmp != 0.0))
+			operations1.Push("(");
+			continue;
+		}
+		if (token[i] == ')') //РµСЃР»Рё Р·Р°РєСЂ СЃРєРѕР±РєР°
 		{
-			check = 0;
-			for (p = 0; p < Str1.size(); p++)
+			str = operations1.Pop();
+			while (str != "(") //РїРѕРєР° РЅРµ РІСЃС‚СЂРµС‚РёРј РѕС‚РєСЂ СЃРєРѕР±РєСѓ РІСЃРµ РІС‹СЂРёСЃС‹РґРІР°РµРј
 			{
-				if ((Str2[p] < '0') || (Str2[p] == ',') || (Str2[p] > '9'))
+				output += str;
+				str = operations1.Pop(); //Р·Р°РїРёСЃС‹РІР°РµРј РІ СЃС‚СЂРѕС‡РєСѓ РЅР°С€Рё РѕРїРµСЂР°С†РёРё
+			}
+			continue;
+		}
+
+		operationIndex = IsOperation(token, i); //Р±РµСЂРµРј РёРЅРґРµРєСЃ РѕРїСЂР°С†РёРё
+		if (operationIndex == -1) //РµСЃР»Рё СЌС‚Рѕ СЃРёРјРІРѕР»
+		{
+			p = 0;
+			m = i;
+			do
+			{
+				m++;
+				p++; //СЃС‡РёС‚Р°РµРј РєРѕР»РёС‡РµСЃРІРѕ СЃРёРјРІРѕР»РѕРІ
+				if (m == size) //РµСЃР»Рё СЂР°Р·РјРµСЂ С‚Рѕ Р°СѓС‚
+					break;
+				operationIndex = IsOperation(token, m); //Р±РµСЂРµРј РёРЅРґР°РєСЃ СЃР»РµРґСѓСЋС‰РµРіРѕ СЌР»РµРјРµРЅС‚Р°
+
+
+			} while (operationIndex == -1); //РїРѕРєР° СЌС‚Рѕ СЃРёРјРІРѕР»
+			output += token.substr(i, p) + " "; //Рє РІС‹С…РѕРґСѓ РїСЂРёРґРµР»С‹РІР°РµРј РЅР°С€Рё СЃРёРјРІРѕР»С‹
+			i = i + p - 1;
+
+		}
+		else  //РµСЃР»Рё СЌС‚Рѕ РѕРїРµСЂР°С†РёСЏ
+		{
+			/*if (token[0] == '-') 
+			{
+				for (int i = size-1; i >= 0; i--)
+					token[i + 1] = token[i];
+				token[0] = '0';
+			}
+
+			if((i>0)&&(operationIndex==1)&&(IsOperation(token, j = i - 1)==6))
+			{
+				token.push_back('0');
+			}*/
+			if (operationIndex == 4 || operationIndex == 5) i += 2; //РµСЃР»Рё СЌС‚Рѕ СЃРёРЅСѓСЃ РёР»Рё РєРѕСЃРёРЅСѓСЃ С‚Рѕ РґРѕР±Р°РІР»СЏРµРј 2
+			if (operations1.IsEmpty()) //РµСЃР»Рё СЃС‚РµРє РїСѓСЃС‚РѕР№
+			{
+				operations1.Push(operations[operationIndex]); //РґРѕР±Р°РІР»СЏРµРј РІ РЅРµРіРѕ РѕРїРµСЂР°С†РёРё
+				continue;
+			}
+
+			operationTop = operations1.Watchtop(); //СЃРјРѕС‚СЂРёРј РІРµСЂС€РёРЅРєСѓ СЃС‚РµРєР°
+			str = operations[operationIndex];
+			if (operationTop == str)
+			{
+				operations1.Push(str);
+				continue;
+			}
+
+			if (GetPrioritet(str) <= GetPrioritet(operationTop)) //<=
+				operations1.Push(str);
+			else
+			{
+				while (GetPrioritet(str) >= GetPrioritet(operationTop) && !(operations1.IsEmpty())) //=>
 				{
-					if (Str2[p] == ',')
+					output += operations1.Pop();
+					if (operations1.IsEmpty())
 					{
-						check++;
 						continue;
 					}
-					cout << "Неправильная запись переменной (Переменная не должна начинатся с цифры) на позиции " << i + 1 << endl;
-					return 0;
+					operationTop = operations1.Watchtop();
 				}
-				if (check > 1)
-				{
-					cout << "Неправильная запись числа - лишняя запятая" << endl;;
-					return 0;
-				}
+				operations1.Push(str);
 			}
 		}
-		i = i + p - 1;
-		if (IsOperation(Str, m = i + 1) == 6)
+	}
+	while (!operations1.IsEmpty())
+		output += operations1.Pop();
+	postfix = output;
+}
+
+double Polish::GetResult()
+{
+	if (postfix == "null") //РµСЃР»Рё РїРѕСЃС‚С„РёРєСЃ РµС‰Рµ РЅРµ СЃРѕР·РґР°РІР°Р»Рё
+	{
+		cout << "РџРѕСЃС‚С„РёРєСЃ РµС‰Рµ РЅРµ СЃРѕР·РґР°РЅ" << endl; //
+		return 0;
+	}
+	int OperationIndex; //РёРЅРґРµРєСЃ РѕРїРµСЂР°С†РёРё
+	Stack <double> stack; //СЃС‚РµРє С‡РёСЃР»Рµ
+	string str;  
+	double tmp, var1, var2;
+	int p, size = postfix.size();
+
+	int i = 0;
+	while (i < size)
+	{
+		OperationIndex = IsOperation(postfix, i); //Р±РµСЂРµРј РёРЅРґРµРєСЃ РїРµСЂРІРѕР№ РїРµСЂРµРјРµРЅРЅРѕР№
+		if (OperationIndex == -1)
 		{
-			cout << "Неверная запись выражения" << endl;
-			cout << "После переменной не может быть открывающей скобки" << endl;
-			return 0;
+			p = 0;
+			do
+			{
+				p++;
+				if (i + p == size)
+					break;
+			} while (postfix[i + p] != ' ');
+			str = postfix.substr(i, p);
+			tmp = atof(str.c_str());
+			i = i + p;
+			stack.Push(tmp);
+			i++;
+			continue;
+		}
+		else
+		{
+
+			var1 = stack.Pop();
+			if (OperationIndex == 4)
+			{
+				i = i + 2;
+				stack.Push(sin((var1*3.14159265) / 180));
+				i++;
+				continue;
+			}
+			if (OperationIndex == 5)
+			{
+				i = i + 2;
+				stack.Push(cos((var1*3.14159265) / 180));
+				i++;
+				continue;
+			}
+			var2 = stack.Pop();
+			switch (OperationIndex)
+			{
+			case 0:
+			{
+				var1 += var2;
+				stack.Push(var1);
+				i++;
+				break;
+			}
+			case 1:
+			{
+				
+				var1 = var2 - var1;
+				stack.Push(var1);
+				i++;
+				break;
+			}
+			case 2:
+			{
+				var1 *= var2;
+				stack.Push(var1);
+				i++;
+				break;
+			}
+			case 3:
+			{
+				if (var1 == 0)
+				{
+					cout << "Р”РµР»РёС‚СЊ РЅР° 0 РїР»РѕС…Рѕ. С„СѓС„СѓС„Сѓ" << endl;
+					return 0;
+				}
+				var1 = var2 / var1;
+				stack.Push(var1);
+				i++;
+				break;
+			}
+			case 8:
+			{
+				var1 = pow(var2, var1);
+				stack.Push(var1);
+				i++;
+
+				break;
+			}
+			}
 		}
 	}
+	return stack.Pop();
 }
-if (amount != 0)
-{
-	cout << "Неверная запись выражения" << endl;
-	cout << "Присутствуют лишние скобки" << endl;
-	return 0;
-}
-return 1;
- }
-
- void Polish::Translator()
- {
-	 string token = infix;
-	 Stack <string> operations1;
-	 string str, output, operationTop;
-	 int size = infix.size(), operationIndex, p, m;
-
-	 for (int i = 0; i < size; i++)
-	 {
-		 if (token[i] == '(')
-		 {
-			 operations1.Push("(");
-			 continue;
-		 }
-		 if (token[i] == ')')
-		 {
-			 str = operations1.Pop();
-			 while (str != "(")
-			 {
-				 output += str;
-				 str = operations1.Pop();
-			 }
-			 continue;
-		 }
-
-		 operationIndex = IsOperation(token, i);
-		 if (operationIndex == -1) //если символ не операция
-		 {
-			 p = 0;
-			 m = i;
-			 do
-			 {
-				 m++;
-				 p++;
-				 if (m == size)
-					 break;
-				 operationIndex = IsOperation(token, m);
-
-
-			 } while (operationIndex == -1);
-			 output += token.substr(i, p) + " ";
-			 i = i + p - 1;
-
-		 }
-		 else  //если операция 
-		 {
-
-			 if (operationIndex == 4 || operationIndex == 5) i += 2;
-			 if (operations1.IsEmpty())
-			 {
-				 operations1.Push(operations[operationIndex] );
-				 continue;
-			 }
-
-			 operationTop = operations1.Watchtop();
-			 str = operations[operationIndex];
-			 if (operationTop == str)
-			 {
-				 operations1.Push(str);
-				 continue;
-			 }
-
-			 if (GetPrioritet(str) >= GetPrioritet(operationTop))
-				 operations1.Push(str);
-			 else
-			 {
-				 while (GetPrioritet(str) <= GetPrioritet(operationTop) && !(operations1.IsEmpty()))
-				 {
-					 output += operations1.Pop();
-					 if (operations1.IsEmpty())
-					 {
-						 continue;
-					 }
-					 operationTop = operations1.Watchtop();
-				 }
-				 operations1.Push(str);
-			 }
-		 }
-	 }
-	 while (!operations1.IsEmpty())
-		 output += operations1.Pop();
-	 postfix = output;
- }
-
- double Polish::GetResult()
- {
-	 if (postfix == "Not exist")
-	 {
-		 cout << "Eror" << endl;
-		 return 0;
-	 }
-	 int OperationIndex;
-	 Stack <double> stack;
-	 string str;
-	 double tmp, var1, var2;
-	 int p, size = postfix.size();
-
-	 int i = 0;
-	 while (i < size)
-	 {
-		 OperationIndex = IsOperation(postfix, i);
-		 if (OperationIndex == -1)
-		 {
-			 p = 0;
-			 do
-			 {
-				 p++;
-				 if (i + p == size)
-					 break;
-			 } while (postfix[i + p] != ' ');
-			 str = postfix.substr(i, p);
-			 tmp = atof(str.c_str());
-			 i = i + p;
-			 stack.Push(tmp);
-			 i++;
-			 continue;
-		 }
-		 else
-		 {
-
-			 var1 = stack.Pop();
-			 if (OperationIndex == 4)
-			 {
-				 i = i + 2;
-				 stack.Push(sin((var1*3.14159265) / 180));
-				 i++;
-				 continue;
-			 }
-			 if (OperationIndex == 5)
-			 {
-				 i = i + 2;
-				 stack.Push(cos((var1*3.14159265) / 180));
-				 i++;
-				 continue;
-			 }
-			 var2 = stack.Pop();
-			 switch (OperationIndex)
-			 {
-			 case 0:
-			 {
-				 var1 += var2;
-				 stack.Push(var1);
-				 i++;
-				 break;
-			 }
-			 case 1:
-			 {
-				 var1 = var2 - var1;
-				 stack.Push(var1);
-				 i++;
-				 break;
-			 }
-			 case 2:
-			 {
-				 var1 *= var2;
-				 stack.Push(var1);
-				 i++;
-				 break;
-			 }
-			 case 3:
-			 {
-				 if (var1 == 0)
-				 {
-					 cout << "Ошибка: в процессе вычисления происходит деление на 0" << endl;
-					 return 0;
-				 }
-				 var1 = var2 / var1;
-				 stack.Push(var1);
-				 i++;
-				 break;
-			 }
-			 case 8:
-			 {
-				 var1 = pow(var2, var1);
-				 stack.Push(var1);
-				 i++;
-
-				 break;
-			 }
-			 }
-		 }
-	 }
-	 return stack.Pop();
- }
 
 #endif

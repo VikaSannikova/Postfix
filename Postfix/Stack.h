@@ -9,10 +9,9 @@ class Stack
 private: ValType *pMem;
 		 int size;   //размер стека
 		 int top;    //вершина стека
-public: //Stack(int size); //конструктор инициализатор
+public:
 		Stack(const int n=MemSize);             //конструктор инициализатор
-		//Stack(const Stack &st);   
-		~Stack();                 //деструктор
+		~Stack();								//деструктор
 
 		bool IsEmpty();           //проверка на пустоту
 		bool IsFull();            //проверка на полноту
@@ -28,14 +27,6 @@ public: //Stack(int size); //конструктор инициализатор
 		//bool operator==(const Stack &st) const;
 		//bool operator!=(const Stack &st) const;
 };
-//
-//template <class ValType> //конструктор инициализатор
-//Stack<ValType>::Stack(int size )
-//{
-//	pMem = new ValType[MemSize];
-//	size = 100;
-//	top = -1;
-//}
 
 template <class ValType> //конструктор инициализатор для новой длины
 Stack<ValType>::Stack(const int n)
@@ -51,16 +42,6 @@ Stack<ValType>::~Stack()
 {
 	delete[]pMem;
 }
-
-//template <class ValType>  //конструктор копирования
-//Stack<ValType>::Stack(const Stack &st)
-//{
-//	size = st.Size;
-//	top = st.top;
-//	pMem = new ValType[Size];
-//	for (int i = 0; i < Size; i++)
-//		pMem[i] = st.pMem[i];
-//}
 
 template <class ValType> //проверка на пустоту
 bool Stack<ValType>::IsEmpty()
